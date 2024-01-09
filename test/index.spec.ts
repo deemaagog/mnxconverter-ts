@@ -1,13 +1,34 @@
-import { myPackage } from '../src';
+import { getMNXScore, getScoreFromMusicXml } from '../src';
+import fs from 'fs';
+import path from 'path';
 
-describe('index', () => {
-  describe('myPackage', () => {
-    it('should return a string containing the message', () => {
-      const message = 'Hello';
+// import jsdom from 'jsdom';
+// const { JSDOM } = jsdom;
+// global.DOMParser = new JSDOM().window.DOMParser;
 
-      const result = myPackage(message);
-
-      expect(result).toMatch(message);
-    });
+describe('Should convert Music XML to MNX', () => {
+  const fixtures = fs.readdirSync(path.join(__dirname, 'fixtures'), {
+    withFileTypes: true,
   });
+
+  for (const fixture of fixtures) {
+    if (path.extname(fixture.name).toLowerCase() === '.musicxml') {
+      const filename = path.parse(fixture.name).name;
+
+      const inputXmlString = fs.readFileSync(
+        path.join(__dirname, 'fixtures', filename + '.musicxml'),
+        'utf8'
+      );
+
+      const outputJSON = fs.readFileSync(
+        path.join(__dirname, 'fixtures', filename + '.mnx'),
+        'utf8'
+      );
+
+      it(filename, () => {
+        const score = getScoreFromMusicXml(inputXmlString);
+        expect(getMNXScore(score)).toStrictEqual(JSON.parse(outputJSON));
+      });
+    }
+  }
 });

@@ -14,7 +14,8 @@
     "prepare": "husky install",
     "semantic-release": "semantic-release",
     "test:watch": "jest --watch",
-    "test": "jest --coverage",
+    "test:coverage": "jest --coverage",
+    "test": "jest",
     "typecheck": "tsc --noEmit"
   },
   "repository": {
@@ -111,5 +112,8 @@
       "@semantic-release/npm",
       "@semantic-release/github"
     ]
+  },
+  "dependencies": {
+    "fraction.js": "^4.3.7"
   }
 }
