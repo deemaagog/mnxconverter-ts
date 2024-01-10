@@ -1,11 +1,11 @@
 # mnxconverter
 
 A Javascript/Typescript package for converting between MusicXML and
-the new MNX format. Ported from Python Package https://github.com/w3c/mnxconverter
+the new MNX format. Works in Browser and Node.js.
 
 ## Disclaimer
 
-This converter is also very limited in scope at the moment.
+This converter is initially ported from Python Package https://github.com/w3c/mnxconverter and very limited in scope at the moment.
 So far, it only reliably converts the types of notations
 described in [Comparing MNX and MusicXML](https://w3c.github.io/mnx/docs/comparisons/musicxml/).
 
@@ -37,9 +37,28 @@ const mnxScore = getMNXScore(score); // encode model as mnx score object
 // }
 ```
 
+### Usage in Node.js
+
+Install jsdom or any browser compatible DomParser
+
+```
+npm install jsdom
+```
+
+Set global variables
+
+```javascript
+const jsdom = require('jsdom');
+const { JSDOM } = jsdom;
+const { DOMParser, XPathResult } = new JSDOM().window;
+global.DOMParser = DOMParser;
+global.XPathResult = XPathResult;
+// conversion code like above...
+```
+
 ## Credits
 
-Higly inspired by [converter](https://github.com/w3c/mnxconverter) developed by Adrian Holovaty
+Highly inspired by [converter](https://github.com/w3c/mnxconverter) developed by Adrian Holovaty
 
 ## Links
 
