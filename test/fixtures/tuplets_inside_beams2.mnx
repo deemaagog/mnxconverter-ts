@@ -1,0 +1,166 @@
+{
+  "global": {
+    "measures": [
+      {
+        "time": {
+          "count": 4,
+          "unit": 4
+        }
+      }
+    ]
+  },
+  "mnx": {
+    "version": 1
+  },
+  "parts": [
+    {
+      "measures": [
+        {
+          "clefs": [
+            {
+              "clef": {
+                "position": -2,
+                "sign": "G"
+              }
+            }
+          ],
+          "sequences": [
+            {
+              "content": [
+                {
+                  "content": [
+                    {
+                      "duration": {
+                        "base": "16th"
+                      },
+                      "id": "ev1",
+                      "notes": [
+                        {
+                          "pitch": {
+                            "octave": 5,
+                            "step": "C"
+                          }
+                        }
+                      ],
+                      "type": "event"
+                    },
+                    {
+                      "duration": {
+                        "base": "16th"
+                      },
+                      "id": "ev2",
+                      "notes": [
+                        {
+                          "pitch": {
+                            "octave": 5,
+                            "step": "D"
+                          }
+                        }
+                      ],
+                      "type": "event"
+                    },
+                    {
+                      "duration": {
+                        "base": "16th"
+                      },
+                      "id": "ev3",
+                      "notes": [
+                        {
+                          "pitch": {
+                            "octave": 5,
+                            "step": "C"
+                          }
+                        }
+                      ],
+                      "type": "event"
+                    }
+                  ],
+                  "inner": {
+                    "duration": "TODO",
+                    "multiple": 3
+                  },
+                  "outer": {
+                    "duration": "TODO",
+                    "multiple": 2
+                  }
+                },
+                {
+                  "content": [
+                    {
+                      "duration": {
+                        "base": "16th"
+                      },
+                      "id": "ev4",
+                      "notes": [
+                        {
+                          "pitch": {
+                            "octave": 5,
+                            "step": "E"
+                          }
+                        }
+                      ],
+                      "type": "event"
+                    },
+                    {
+                      "duration": {
+                        "base": "16th"
+                      },
+                      "id": "ev5",
+                      "notes": [
+                        {
+                          "pitch": {
+                            "octave": 5,
+                            "step": "F"
+                          }
+                        }
+                      ],
+                      "type": "event"
+                    },
+                    {
+                      "duration": {
+                        "base": "16th"
+                      },
+                      "id": "ev6",
+                      "notes": [
+                        {
+                          "pitch": {
+                            "octave": 5,
+                            "step": "E"
+                          }
+                        }
+                      ],
+                      "type": "event"
+                    }
+                  ],
+                  "inner": {
+                    "duration": "TODO",
+                    "multiple": 3
+                  },
+                  "outer": {
+                    "duration": "TODO",
+                    "multiple": 2
+                  }
+                },
+                {
+                  "duration": {
+                    "base": "quarter"
+                  },
+                  "rest": {},
+                  "type": "event"
+                },
+                {
+                  "duration": {
+                    "base": "half"
+                  },
+                  "rest": {},
+                  "type": "event"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "name": "Music"
+    }
+  ]
+}

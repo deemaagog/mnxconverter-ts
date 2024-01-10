@@ -1,1 +1,3 @@
-export const myPackage = (taco = ''): string => `${taco} from my package`;
+export * from './mnx';
+export * from './musicxml';
+export * from './score';
