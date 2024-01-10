@@ -1,5 +1,5 @@
 {
-  "name": "mnxconverver",
+  "name": "mnxconverter",
   "version": "0.0.0-development",
   "description": "Music XML - MNX converter",
   "main": "./lib/index.js",
