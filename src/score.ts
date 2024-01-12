@@ -237,6 +237,7 @@ export class SequenceContent {
       this.items.splice(
         startIdx,
         endIdx - startIdx + 1,
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         new SequenceItemSubClass(this, foldedItems, kwargs)
       );
       return true;
