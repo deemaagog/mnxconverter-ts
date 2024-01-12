@@ -3,5 +3,5 @@
   "exclude": [
     "test/**/*.spec.ts",
   ],
-  "compilerOptions": {"outDir": "./lib/cjs"}
+  "compilerOptions": {"module": "ESNext", "outDir": "./lib/esm"}
 }

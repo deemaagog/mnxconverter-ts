@@ -223,7 +223,7 @@ class MusicXMLReader {
       Record<string, string>,
       Record<string, string> | null,
       Note,
-      Note | null
+      Note | null,
     ]
   >;
   completeSlurs: [
@@ -231,7 +231,7 @@ class MusicXMLReader {
     Record<string, string>,
     Record<string, string> | null,
     Note,
-    Note | null
+    Note | null,
   ][];
   currentGraceNoteGroup: GraceNoteGroup | null;
   nextEventId: number;
@@ -640,7 +640,7 @@ class MusicXMLReader {
     let duration = 0;
     let noteType = null;
     let numDots = 0;
-    const beams: any[] = [];
+    const beams: [number, string][] = [];
     const closedTupletNumbers: string[] = [];
     let timeMod: TupletRatio | null = null;
     let event;
