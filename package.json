@@ -48,6 +48,7 @@
   "devDependencies": {
     "@ryansonshine/commitizen": "^4.2.8",
     "@ryansonshine/cz-conventional-changelog": "^3.3.4",
+    "@semantic-release/git": "^10.0.1",
     "@types/jest": "^29.5.11",
     "@types/node": "^20.11.0",
     "@typescript-eslint/eslint-plugin": "^6.18.1",
@@ -117,7 +118,8 @@
         }
       ],
       "@semantic-release/npm",
-      "@semantic-release/github"
+      "@semantic-release/github",
+      "@semantic-release/git"
     ]
   },
   "dependencies": {
