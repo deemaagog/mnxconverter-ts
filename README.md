@@ -1,7 +1,7 @@
 # mnxconverter
 
 A Javascript/Typescript package for converting between MusicXML and
-the new MNX format. Works in Browser and Node.js.
+the new MNX format. Works in browsers, Node.js, and React Native / Expo
 
 ## Disclaimer
 
@@ -37,24 +37,6 @@ const mnxScore = getMNXScore(score); // encode model as mnx score object
 // }
 ```
 
-### Usage in Node.js
-
-Install jsdom or any browser compatible DomParser
-
-```
-npm install jsdom
-```
-
-Set global variables
-
-```javascript
-const jsdom = require('jsdom');
-const { JSDOM } = jsdom;
-const { DOMParser, XPathResult } = new JSDOM().window;
-global.DOMParser = DOMParser;
-global.XPathResult = XPathResult;
-// conversion code like above...
-```
 
 ## Credits
 

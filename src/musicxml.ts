@@ -2,6 +2,16 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import Fraction from 'fraction.js';
 import {
+  parseXml,
+  querySelector,
+  querySelectorAll,
+  selectOne,
+  childNodesOf,
+  getDocumentElement,
+  type Document,
+  type Element,
+} from './xml';
+import {
   Bar,
   BarPart,
   Beam,
@@ -103,17 +113,15 @@ class NotationDataError extends Error {
 }
 
 const getMusicxml = (xmlString: string) => {
-  const parser = new DOMParser();
-
   try {
-    return parser.parseFromString(xmlString, 'text/xml');
+    return parseXml(xmlString);
   } catch (error) {
     throw new NotationImportError('XML syntax error');
   }
 };
 
 const convertToTimewise = (xml: Document): Document => {
-  const firstPart = xml.querySelector('part');
+  const firstPart = querySelector(xml, 'part');
 
   if (!firstPart) {
     throw new Error("Couldn't convert partwise to timewise. No part found.");
@@ -121,24 +129,25 @@ const convertToTimewise = (xml: Document): Document => {
 
   // Create a new root element with the 'score-timewise' tag name
   const newRootElement = xml.createElement('score-timewise');
+  const documentElement = getDocumentElement(xml);
 
   // Copy attributes from the original root element to the new one
-  for (const attr of xml.documentElement.attributes) {
+  for (const attr of documentElement.attributes) {
     newRootElement.setAttribute(attr.name, attr.value);
   }
 
-  while (xml.documentElement.firstChild) {
-    newRootElement.appendChild(xml.documentElement.firstChild);
+  while (documentElement.firstChild) {
+    newRootElement.appendChild(documentElement.firstChild);
   }
 
   // Replace the original root element with the new one
-  xml.replaceChild(newRootElement, xml.documentElement);
+  xml.replaceChild(newRootElement, documentElement);
 
   // Create an array to store new measure elements
-  const newMeasures: HTMLElement[] = [];
+  const newMeasures: Element[] = [];
 
   // Iterate through measures in the first part
-  firstPart.querySelectorAll('measure').forEach(oldMeasure => {
+  querySelectorAll(firstPart, 'measure').forEach(oldMeasure => {
     const newMeasure = xml.createElement('measure');
 
     // Copy attributes from old measure to new measure
@@ -151,8 +160,8 @@ const convertToTimewise = (xml: Document): Document => {
   });
 
   // Iterate through parts in the XML
-  xml.querySelectorAll('part').forEach(part => {
-    part.querySelectorAll('measure').forEach((measure, i) => {
+  querySelectorAll(xml, 'part').forEach(part => {
+    querySelectorAll(part, 'measure').forEach((measure, i) => {
       try {
         const newMeasure = newMeasures[i];
         const measurePart = xml.createElement('part');
@@ -169,7 +178,7 @@ const convertToTimewise = (xml: Document): Document => {
         }
 
         // Move elements from measure to measure part
-        measure.childNodes.forEach(subEl => {
+        childNodesOf(measure).forEach(subEl => {
           measurePart.appendChild(subEl.cloneNode(true));
         });
 
@@ -191,7 +200,7 @@ const convertToTimewise = (xml: Document): Document => {
 };
 
 const cleanMusicxml = (xml: Document): Document => {
-  const tag = xml.documentElement.tagName;
+  const tag = getDocumentElement(xml).tagName;
   if (tag == 'score-partwise') {
     xml = convertToTimewise(xml);
   } else if (tag != 'score-timewise') {
@@ -265,9 +274,9 @@ class MusicXMLReader {
 
   parsePartList(): void {
     const parts = this.score.parts;
-    const partListEl = this.xml.querySelector('part-list');
+    const partListEl = querySelector(this.xml, 'part-list');
     if (partListEl !== null) {
-      for (const scorePartEl of partListEl.querySelectorAll('score-part')) {
+      for (const scorePartEl of querySelectorAll(partListEl, 'score-part')) {
         const part = this.parsePart(scorePartEl);
         parts.push(part);
       }
@@ -280,18 +289,15 @@ class MusicXMLReader {
       throw new Error("<score-part> is missing an 'id' attribute.");
     }
 
-    const partNameEl = scorePartEl.querySelector('part-name');
+    const partNameEl = querySelector(scorePartEl, 'part-name');
     const name = partNameEl ? partNameEl.textContent : null;
 
-    let firstMeasureEl;
+    let firstMeasureEl: Element | null = null;
     try {
-      firstMeasureEl = this.xml.evaluate(
+      firstMeasureEl = selectOne(
         `measure/part[@id="${partId}"]`,
-        this.xml,
-        null,
-        XPathResult.FIRST_ORDERED_NODE_TYPE,
-        null
-      ).singleNodeValue as Element;
+        this.xml
+      );
     } catch (error) {
       // handle the error
       console.error(error);
@@ -306,10 +312,10 @@ class MusicXMLReader {
 
   parseMeasureTranspose(measureEl: Element): number {
     let result = 0;
-    const transposeEl = measureEl.querySelector('attributes/transpose');
+    const transposeEl = querySelector(measureEl, 'attributes/transpose');
 
     if (transposeEl !== null) {
-      const chromaticEl = transposeEl.querySelector('chromatic');
+      const chromaticEl = querySelector(transposeEl, 'chromatic');
       if (chromaticEl !== null && chromaticEl.textContent) {
         try {
           result += parseInt(chromaticEl.textContent);
@@ -319,7 +325,7 @@ class MusicXMLReader {
         }
       }
 
-      const octaveChangeEl = transposeEl.querySelector('octave-change');
+      const octaveChangeEl = querySelector(transposeEl, 'octave-change');
       if (octaveChangeEl !== null && octaveChangeEl.textContent) {
         try {
           result += parseInt(octaveChangeEl.textContent) * 12;
@@ -338,13 +344,13 @@ class MusicXMLReader {
     const bars = score.bars;
     const parts = score.parts;
 
-    const measureElements = this.xml.querySelectorAll('measure');
+    const measureElements = querySelectorAll(this.xml, 'measure');
 
     measureElements.forEach((measureEl, idx) => {
       const bar = new Bar(score, idx);
       bars.push(bar);
 
-      measureEl.querySelectorAll('part').forEach((measurePartEl, partIdx) => {
+      querySelectorAll(measureEl, 'part').forEach((measurePartEl, partIdx) => {
         this.parseMeasurePart(measurePartEl, bar, parts[partIdx]);
       });
     });
@@ -516,7 +522,7 @@ class MusicXMLReader {
 
   parseForwardBackup(el: Element): number {
     this.currentGraceNoteGroup = null;
-    const durationEl = el.querySelector('duration');
+    const durationEl = querySelector(el, 'duration');
 
     if (!durationEl) {
       return 0;
@@ -587,7 +593,7 @@ class MusicXMLReader {
   parseKey(keyEl: Element, part: Part): KeySignature {
     try {
       const fifths = parseInt(
-        keyEl.querySelector('fifths')?.textContent || '',
+        querySelector(keyEl, 'fifths')?.textContent || '',
         10
       );
       return new KeySignature(fifths).toConcert(part);
@@ -605,7 +611,7 @@ class MusicXMLReader {
     let denominator = 4;
 
     try {
-      const beatsEl = timeEl.querySelector('beats');
+      const beatsEl = querySelector(timeEl, 'beats');
       // @ts-expect-error
       numerator = parseInt(beatsEl.textContent || '', 10);
     } catch (error) {
@@ -613,7 +619,7 @@ class MusicXMLReader {
     }
 
     try {
-      const beatTypeEl = timeEl.querySelector('beat-type');
+      const beatTypeEl = querySelector(timeEl, 'beat-type');
       // @ts-expect-error
       denominator = parseInt(beatTypeEl.textContent || '', 10);
     } catch (error) {

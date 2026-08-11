@@ -2,10 +2,6 @@ import { getMNXScore, getScoreFromMusicXml } from '../src';
 import fs from 'fs';
 import path from 'path';
 
-// import jsdom from 'jsdom';
-// const { JSDOM } = jsdom;
-// global.DOMParser = new JSDOM().window.DOMParser;
-
 describe('Should convert Music XML to MNX', () => {
   const fixtures = fs.readdirSync(path.join(__dirname, 'fixtures'), {
     withFileTypes: true,
