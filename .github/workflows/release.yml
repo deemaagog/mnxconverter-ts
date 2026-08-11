@@ -38,5 +38,7 @@ jobs:
       - name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Skip husky hooks — prepare-commit-msg opens /dev/tty (unavailable in CI)
+          HUSKY: '0'
           # npm publish authenticates via OIDC trusted publishing — no NPM_TOKEN
         run: npx semantic-release
