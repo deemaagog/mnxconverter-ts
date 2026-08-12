@@ -1,4 +1,10 @@
 {
+  "mnx": {
+    "version": 1,
+    "support": {
+      "useAccidentalDisplay": true
+    }
+  },
   "global": {
     "measures": [
       {
@@ -9,21 +15,10 @@
       }
     ]
   },
-  "mnx": {
-    "version": 1
-  },
   "parts": [
     {
       "measures": [
         {
-          "clefs": [
-            {
-              "clef": {
-                "position": -2,
-                "sign": "G"
-              }
-            }
-          ],
           "sequences": [
             {
               "content": [
@@ -34,14 +29,21 @@
                   "notes": [
                     {
                       "pitch": {
-                        "octave": 4,
-                        "step": "C"
+                        "step": "C",
+                        "octave": 4
                       }
                     }
-                  ],
-                  "type": "event"
+                  ]
                 }
               ]
+            }
+          ],
+          "clefs": [
+            {
+              "clef": {
+                "staffPosition": -2,
+                "sign": "G"
+              }
             }
           ]
         }

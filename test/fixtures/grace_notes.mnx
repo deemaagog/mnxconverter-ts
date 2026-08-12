@@ -1,4 +1,10 @@
 {
+  "mnx": {
+    "version": 1,
+    "support": {
+      "useAccidentalDisplay": true
+    }
+  },
   "global": {
     "measures": [
       {
@@ -9,25 +15,15 @@
       }
     ]
   },
-  "mnx": {
-    "version": 1
-  },
   "parts": [
     {
       "measures": [
         {
-          "clefs": [
-            {
-              "clef": {
-                "position": -2,
-                "sign": "G"
-              }
-            }
-          ],
           "sequences": [
             {
               "content": [
                 {
+                  "type": "grace",
                   "content": [
                     {
                       "duration": {
@@ -36,15 +32,13 @@
                       "notes": [
                         {
                           "pitch": {
-                            "octave": 4,
-                            "step": "B"
+                            "step": "B",
+                            "octave": 4
                           }
                         }
-                      ],
-                      "type": "event"
+                      ]
                     }
-                  ],
-                  "type": "grace"
+                  ]
                 },
                 {
                   "duration": {
@@ -53,14 +47,14 @@
                   "notes": [
                     {
                       "pitch": {
-                        "octave": 5,
-                        "step": "C"
+                        "step": "C",
+                        "octave": 5
                       }
                     }
-                  ],
-                  "type": "event"
+                  ]
                 },
                 {
+                  "type": "grace",
                   "content": [
                     {
                       "duration": {
@@ -69,12 +63,11 @@
                       "notes": [
                         {
                           "pitch": {
-                            "octave": 4,
-                            "step": "A"
+                            "step": "A",
+                            "octave": 4
                           }
                         }
-                      ],
-                      "type": "event"
+                      ]
                     },
                     {
                       "duration": {
@@ -83,15 +76,13 @@
                       "notes": [
                         {
                           "pitch": {
-                            "octave": 4,
-                            "step": "B"
+                            "step": "B",
+                            "octave": 4
                           }
                         }
-                      ],
-                      "type": "event"
+                      ]
                     }
-                  ],
-                  "type": "grace"
+                  ]
                 },
                 {
                   "duration": {
@@ -100,14 +91,14 @@
                   "notes": [
                     {
                       "pitch": {
-                        "octave": 5,
-                        "step": "C"
+                        "step": "C",
+                        "octave": 5
                       }
                     }
-                  ],
-                  "type": "event"
+                  ]
                 },
                 {
+                  "type": "grace",
                   "content": [
                     {
                       "duration": {
@@ -116,12 +107,11 @@
                       "notes": [
                         {
                           "pitch": {
-                            "octave": 4,
-                            "step": "G"
+                            "step": "G",
+                            "octave": 4
                           }
                         }
-                      ],
-                      "type": "event"
+                      ]
                     },
                     {
                       "duration": {
@@ -130,12 +120,11 @@
                       "notes": [
                         {
                           "pitch": {
-                            "octave": 4,
-                            "step": "A"
+                            "step": "A",
+                            "octave": 4
                           }
                         }
-                      ],
-                      "type": "event"
+                      ]
                     },
                     {
                       "duration": {
@@ -144,15 +133,13 @@
                       "notes": [
                         {
                           "pitch": {
-                            "octave": 4,
-                            "step": "B"
+                            "step": "B",
+                            "octave": 4
                           }
                         }
-                      ],
-                      "type": "event"
+                      ]
                     }
-                  ],
-                  "type": "grace"
+                  ]
                 },
                 {
                   "duration": {
@@ -161,14 +148,14 @@
                   "notes": [
                     {
                       "pitch": {
-                        "octave": 5,
-                        "step": "C"
+                        "step": "C",
+                        "octave": 5
                       }
                     }
-                  ],
-                  "type": "event"
+                  ]
                 },
                 {
+                  "type": "grace",
                   "content": [
                     {
                       "duration": {
@@ -177,12 +164,11 @@
                       "notes": [
                         {
                           "pitch": {
-                            "octave": 4,
-                            "step": "F"
+                            "step": "F",
+                            "octave": 4
                           }
                         }
-                      ],
-                      "type": "event"
+                      ]
                     },
                     {
                       "duration": {
@@ -191,12 +177,11 @@
                       "notes": [
                         {
                           "pitch": {
-                            "octave": 4,
-                            "step": "G"
+                            "step": "G",
+                            "octave": 4
                           }
                         }
-                      ],
-                      "type": "event"
+                      ]
                     },
                     {
                       "duration": {
@@ -205,12 +190,11 @@
                       "notes": [
                         {
                           "pitch": {
-                            "octave": 4,
-                            "step": "A"
+                            "step": "A",
+                            "octave": 4
                           }
                         }
-                      ],
-                      "type": "event"
+                      ]
                     },
                     {
                       "duration": {
@@ -219,15 +203,13 @@
                       "notes": [
                         {
                           "pitch": {
-                            "octave": 4,
-                            "step": "B"
+                            "step": "B",
+                            "octave": 4
                           }
                         }
-                      ],
-                      "type": "event"
+                      ]
                     }
-                  ],
-                  "type": "grace"
+                  ]
                 },
                 {
                   "duration": {
@@ -236,14 +218,21 @@
                   "notes": [
                     {
                       "pitch": {
-                        "octave": 5,
-                        "step": "C"
+                        "step": "C",
+                        "octave": 5
                       }
                     }
-                  ],
-                  "type": "event"
+                  ]
                 }
               ]
+            }
+          ],
+          "clefs": [
+            {
+              "clef": {
+                "staffPosition": -2,
+                "sign": "G"
+              }
             }
           ]
         }

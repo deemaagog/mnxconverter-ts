@@ -1,17 +1,16 @@
 # mnxconverter
 
 A Javascript/Typescript package for converting between MusicXML and
-the new MNX format. Works in browsers, Node.js, and React Native / Expo
+the new MNX format. Works in browsers, Node.js, and React Native / Expo.
 
 ## Disclaimer
 
-This converter is initially ported from Python Package https://github.com/w3c/mnxconverter and very limited in scope at the moment.
-So far, it only reliably converts the types of notations
-described in [Comparing MNX and MusicXML](https://w3c.github.io/mnx/docs/comparisons/musicxml/).
+This converter was initially ported from the Python package
+[w3c-cg/mnxconverter](https://github.com/w3c-cg/mnxconverter) and is still
+limited in scope. Output shape follows the current
+[MNX JSON schema](https://github.com/w3c-cg/mnx/blob/main/docs/mnx-schema.json)
 
 ## Installation
-
-First, make sure you have package installed:
 
 ```
 npm install mnxconverter
@@ -37,12 +36,76 @@ const mnxScore = getMNXScore(score); // encode model as mnx score object
 // }
 ```
 
+## Maintaining this library
+
+### Source of truth
+
+1. **MNX output shape** — [`schema/mnx-schema.json`](schema/mnx-schema.json), copied from
+   [w3c-cg/mnx](https://github.com/w3c-cg/mnx/blob/main/docs/mnx-schema.json).
+2. **MusicXML → internal model heuristics** — this repo’s importer, with
+   [w3c-cg/mnxconverter](https://github.com/w3c-cg/mnxconverter) as a useful reference
+   (not authoritative for JSON field names or nesting).
+3. **Examples** — official docs examples under
+   [`docs/static/examples/json`](https://github.com/w3c-cg/mnx/tree/main/docs/static/examples/json).
+
+`src/mnx-types.ts` is generated from the schema. Do not edit it by hand.
+
+### Keep in sync with the official schema
+
+```bash
+# 1. Refresh the schema copy
+curl -fsSL https://raw.githubusercontent.com/w3c-cg/mnx/main/docs/mnx-schema.json \
+  -o schema/mnx-schema.json
+
+# 2. Regenerate TypeScript types
+npm run generate:types
+
+# 3. See what fixtures / converter output no longer validates
+npm run schema:report
+
+# 4. Fix the exporter (src/mnx.ts) and importer (src/musicxml.ts / src/score.ts) as needed
+
+# 5. Refresh golden MNX fixtures from MusicXML inputs
+npm run fixtures:regenerate
+
+# 6. Confirm everything
+npm test
+```
+
+`npm test` includes AJV validation of every `.mnx` fixture **and** of live converter
+output (`test/schema.spec.ts`).
+
+### Add a new MusicXML → MNX feature
+
+1. Prefer a small vertical slice (one notation concept).
+2. Add a pair of fixtures under `test/fixtures/`:
+   - `feature_name.musicxml` — input
+   - `feature_name.mnx` — expected MNX (or generate it after the exporter works)
+3. Implement parsing into the internal score model (`src/musicxml.ts`, `src/score.ts`).
+4. Implement encoding to MNX (`src/mnx.ts`), matching the schema and official examples.
+5. Run `npm run schema:report` and `npm test`.
+6. If the Python converter already has a related test, reuse its MusicXML when useful —
+   but regenerate or rewrite the `.mnx` against the **current** schema.
+
+When schema and the Python converter disagree (for example ottavas belong on
+`part-measure.ottavas` today, not inside sequence `content`), follow the schema.
+
+### Useful scripts
+
+| Script | Purpose |
+| --- | --- |
+| `npm run generate:types` | Rebuild `src/mnx-types.ts` from `schema/mnx-schema.json` |
+| `npm run schema:report` | Print field-level AJV errors for fixtures and converter output |
+| `npm run fixtures:regenerate` | Rewrite all `*.mnx` from corresponding `*.musicxml` |
+| `npm test` | Unit tests + schema validation |
 
 ## Credits
 
-Highly inspired by [converter](https://github.com/w3c/mnxconverter) developed by Adrian Holovaty
+Highly inspired by the [Python converter](https://github.com/w3c-cg/mnxconverter)
+developed by Adrian Holovaty.
 
 ## Links
 
-[MNX documentation](https://w3c.github.io/mnx/docs/).
-[W3C Music Notation Community Group](https://www.w3.org/community/music-notation/).
+- [MNX documentation](https://w3c-cg.github.io/mnx/docs/)
+- [MNX schema](https://github.com/w3c-cg/mnx/blob/main/docs/mnx-schema.json)
+- [W3C Music Notation Community Group](https://www.w3.org/community/music-notation/)

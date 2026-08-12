@@ -1,34 +1,29 @@
 {
+  "mnx": {
+    "version": 1,
+    "support": {
+      "useAccidentalDisplay": true
+    }
+  },
   "global": {
     "measures": [
       {
-        "key": {
-          "fifths": -2
-        },
         "time": {
           "count": 4,
           "unit": 4
+        },
+        "key": {
+          "fifths": -2
         }
       },
       {},
       {}
     ]
   },
-  "mnx": {
-    "version": 1
-  },
   "parts": [
     {
       "measures": [
         {
-          "clefs": [
-            {
-              "clef": {
-                "position": -2,
-                "sign": "G"
-              }
-            }
-          ],
           "sequences": [
             {
               "content": [
@@ -39,12 +34,11 @@
                   "notes": [
                     {
                       "pitch": {
-                        "octave": 4,
-                        "step": "F"
+                        "step": "F",
+                        "octave": 4
                       }
                     }
-                  ],
-                  "type": "event"
+                  ]
                 },
                 {
                   "duration": {
@@ -53,12 +47,11 @@
                   "notes": [
                     {
                       "pitch": {
-                        "octave": 4,
-                        "step": "G"
+                        "step": "G",
+                        "octave": 4
                       }
                     }
-                  ],
-                  "type": "event"
+                  ]
                 },
                 {
                   "duration": {
@@ -66,17 +59,16 @@
                   },
                   "notes": [
                     {
+                      "pitch": {
+                        "step": "G",
+                        "octave": 4,
+                        "alter": 1
+                      },
                       "accidentalDisplay": {
                         "show": true
-                      },
-                      "pitch": {
-                        "alter": 1,
-                        "octave": 4,
-                        "step": "G"
                       }
                     }
-                  ],
-                  "type": "event"
+                  ]
                 },
                 {
                   "duration": {
@@ -85,14 +77,21 @@
                   "notes": [
                     {
                       "pitch": {
-                        "octave": 4,
-                        "step": "A"
+                        "step": "A",
+                        "octave": 4
                       }
                     }
-                  ],
-                  "type": "event"
+                  ]
                 }
               ]
+            }
+          ],
+          "clefs": [
+            {
+              "clef": {
+                "staffPosition": -2,
+                "sign": "G"
+              }
             }
           ]
         },
@@ -107,13 +106,12 @@
                   "notes": [
                     {
                       "pitch": {
-                        "alter": -1,
+                        "step": "B",
                         "octave": 4,
-                        "step": "B"
+                        "alter": -1
                       }
                     }
-                  ],
-                  "type": "event"
+                  ]
                 },
                 {
                   "duration": {
@@ -121,17 +119,16 @@
                   },
                   "notes": [
                     {
+                      "pitch": {
+                        "step": "D",
+                        "octave": 5,
+                        "alter": -1
+                      },
                       "accidentalDisplay": {
                         "show": true
-                      },
-                      "pitch": {
-                        "alter": -1,
-                        "octave": 5,
-                        "step": "D"
                       }
                     }
-                  ],
-                  "type": "event"
+                  ]
                 },
                 {
                   "duration": {
@@ -140,13 +137,12 @@
                   "notes": [
                     {
                       "pitch": {
-                        "alter": -1,
+                        "step": "D",
                         "octave": 5,
-                        "step": "D"
+                        "alter": -1
                       }
                     }
-                  ],
-                  "type": "event"
+                  ]
                 }
               ]
             }
@@ -162,16 +158,15 @@
                   },
                   "notes": [
                     {
+                      "pitch": {
+                        "step": "D",
+                        "octave": 5
+                      },
                       "accidentalDisplay": {
                         "show": true
-                      },
-                      "pitch": {
-                        "octave": 5,
-                        "step": "D"
                       }
                     }
-                  ],
-                  "type": "event"
+                  ]
                 }
               ]
             }

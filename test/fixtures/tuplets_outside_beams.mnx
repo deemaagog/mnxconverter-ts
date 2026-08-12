@@ -1,4 +1,10 @@
 {
+  "mnx": {
+    "version": 1,
+    "support": {
+      "useAccidentalDisplay": true
+    }
+  },
   "global": {
     "measures": [
       {
@@ -9,32 +15,33 @@
       }
     ]
   },
-  "mnx": {
-    "version": 1
-  },
   "parts": [
     {
       "measures": [
         {
-          "clefs": [
-            {
-              "clef": {
-                "position": -2,
-                "sign": "G"
-              }
-            }
-          ],
           "sequences": [
             {
               "content": [
                 {
+                  "type": "tuplet",
+                  "inner": {
+                    "multiple": 3,
+                    "duration": {
+                      "base": "eighth"
+                    }
+                  },
+                  "outer": {
+                    "multiple": 2,
+                    "duration": {
+                      "base": "eighth"
+                    }
+                  },
                   "content": [
                     {
                       "duration": {
                         "base": "eighth"
                       },
-                      "rest": {},
-                      "type": "event"
+                      "rest": {}
                     },
                     {
                       "duration": {
@@ -44,12 +51,11 @@
                       "notes": [
                         {
                           "pitch": {
-                            "octave": 5,
-                            "step": "C"
+                            "step": "C",
+                            "octave": 5
                           }
                         }
-                      ],
-                      "type": "event"
+                      ]
                     },
                     {
                       "duration": {
@@ -59,38 +65,35 @@
                       "notes": [
                         {
                           "pitch": {
-                            "octave": 5,
-                            "step": "E"
+                            "step": "E",
+                            "octave": 5
                           }
                         }
-                      ],
-                      "type": "event"
+                      ]
                     }
-                  ],
-                  "inner": {
-                    "duration": "TODO",
-                    "multiple": 3
-                  },
-                  "outer": {
-                    "duration": "TODO",
-                    "multiple": 2
-                  }
+                  ]
                 },
                 {
                   "duration": {
                     "base": "quarter"
                   },
-                  "rest": {},
-                  "type": "event"
+                  "rest": {}
                 },
                 {
                   "duration": {
                     "base": "half"
                   },
-                  "rest": {},
-                  "type": "event"
+                  "rest": {}
                 }
               ]
+            }
+          ],
+          "clefs": [
+            {
+              "clef": {
+                "staffPosition": -2,
+                "sign": "G"
+              }
             }
           ]
         }

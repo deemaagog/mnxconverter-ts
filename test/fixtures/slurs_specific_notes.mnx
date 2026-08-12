@@ -1,4 +1,10 @@
 {
+  "mnx": {
+    "version": 1,
+    "support": {
+      "useAccidentalDisplay": true
+    }
+  },
   "global": {
     "measures": [
       {
@@ -9,21 +15,10 @@
       }
     ]
   },
-  "mnx": {
-    "version": 1
-  },
   "parts": [
     {
       "measures": [
         {
-          "clefs": [
-            {
-              "clef": {
-                "position": -2,
-                "sign": "G"
-              }
-            }
-          ],
           "sequences": [
             {
               "content": [
@@ -33,48 +28,47 @@
                   },
                   "notes": [
                     {
-                      "id": "note1",
                       "pitch": {
-                        "octave": 5,
-                        "step": "C"
-                      }
+                        "step": "C",
+                        "octave": 5
+                      },
+                      "id": "note1"
                     },
                     {
-                      "id": "note2",
                       "pitch": {
-                        "octave": 5,
-                        "step": "E"
-                      }
+                        "step": "E",
+                        "octave": 5
+                      },
+                      "id": "note2"
                     },
                     {
-                      "id": "note3",
                       "pitch": {
-                        "octave": 5,
-                        "step": "G"
-                      }
+                        "step": "G",
+                        "octave": 5
+                      },
+                      "id": "note3"
                     }
                   ],
                   "slurs": [
                     {
-                      "end-note": "note4",
-                      "side": "down",
-                      "start-note": "note1",
-                      "target": "ev2"
+                      "target": "ev2",
+                      "startNote": "note1",
+                      "endNote": "note4",
+                      "side": "down"
                     },
                     {
-                      "end-note": "note5",
-                      "side": "up",
-                      "start-note": "note2",
-                      "target": "ev2"
+                      "target": "ev2",
+                      "startNote": "note2",
+                      "endNote": "note5",
+                      "side": "up"
                     },
                     {
-                      "end-note": "note6",
-                      "side": "up",
-                      "start-note": "note3",
-                      "target": "ev2"
+                      "target": "ev2",
+                      "startNote": "note3",
+                      "endNote": "note6",
+                      "side": "up"
                     }
-                  ],
-                  "type": "event"
+                  ]
                 },
                 {
                   "duration": {
@@ -83,30 +77,37 @@
                   "id": "ev2",
                   "notes": [
                     {
-                      "id": "note4",
                       "pitch": {
-                        "octave": 4,
-                        "step": "B"
-                      }
+                        "step": "B",
+                        "octave": 4
+                      },
+                      "id": "note4"
                     },
                     {
-                      "id": "note5",
                       "pitch": {
-                        "octave": 5,
-                        "step": "D"
-                      }
+                        "step": "D",
+                        "octave": 5
+                      },
+                      "id": "note5"
                     },
                     {
-                      "id": "note6",
                       "pitch": {
-                        "octave": 5,
-                        "step": "F"
-                      }
+                        "step": "F",
+                        "octave": 5
+                      },
+                      "id": "note6"
                     }
-                  ],
-                  "type": "event"
+                  ]
                 }
               ]
+            }
+          ],
+          "clefs": [
+            {
+              "clef": {
+                "staffPosition": -2,
+                "sign": "G"
+              }
             }
           ]
         }

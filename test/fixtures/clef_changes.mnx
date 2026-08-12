@@ -1,4 +1,10 @@
 {
+  "mnx": {
+    "version": 1,
+    "support": {
+      "useAccidentalDisplay": true
+    }
+  },
   "global": {
     "measures": [
       {
@@ -9,33 +15,10 @@
       }
     ]
   },
-  "mnx": {
-    "version": 1
-  },
   "parts": [
     {
       "measures": [
         {
-          "clefs": [
-            {
-              "clef": {
-                "position": -2,
-                "sign": "G"
-              }
-            },
-            {
-              "clef": {
-                "position": 2,
-                "sign": "F"
-              },
-              "position": {
-                "fraction": [
-                  1,
-                  2
-                ]
-              }
-            }
-          ],
           "sequences": [
             {
               "content": [
@@ -46,12 +29,11 @@
                   "notes": [
                     {
                       "pitch": {
-                        "octave": 4,
-                        "step": "C"
+                        "step": "C",
+                        "octave": 4
                       }
                     }
-                  ],
-                  "type": "event"
+                  ]
                 },
                 {
                   "duration": {
@@ -60,12 +42,11 @@
                   "notes": [
                     {
                       "pitch": {
-                        "octave": 3,
-                        "step": "G"
+                        "step": "G",
+                        "octave": 3
                       }
                     }
-                  ],
-                  "type": "event"
+                  ]
                 },
                 {
                   "duration": {
@@ -74,12 +55,11 @@
                   "notes": [
                     {
                       "pitch": {
-                        "octave": 3,
-                        "step": "E"
+                        "step": "E",
+                        "octave": 3
                       }
                     }
-                  ],
-                  "type": "event"
+                  ]
                 },
                 {
                   "duration": {
@@ -88,14 +68,33 @@
                   "notes": [
                     {
                       "pitch": {
-                        "octave": 3,
-                        "step": "C"
+                        "step": "C",
+                        "octave": 3
                       }
                     }
-                  ],
-                  "type": "event"
+                  ]
                 }
               ]
+            }
+          ],
+          "clefs": [
+            {
+              "clef": {
+                "staffPosition": -2,
+                "sign": "G"
+              }
+            },
+            {
+              "clef": {
+                "staffPosition": 2,
+                "sign": "F"
+              },
+              "position": {
+                "fraction": [
+                  1,
+                  2
+                ]
+              }
             }
           ]
         }
