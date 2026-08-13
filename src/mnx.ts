@@ -1,6 +1,7 @@
 import type {
   Clef as MNXClef,
   Event as MNXEvent,
+  EventMarkings,
   Grace as MNXGrace,
   MeasureGlobal,
   MNXDocument,
@@ -12,14 +13,27 @@ import type {
   Part as MNXPart,
   PartMeasure,
   PositionedClef as MNXPositionedClef,
+  Sequence as MNXSequence,
   SequenceContent,
   Slur as MNXSlur,
+  Tie as MNXTie,
   Tuplet as MNXTuplet,
 } from './mnx-types';
 import {
+  AccentMarking,
+  BreathMarking,
   Score,
   Note,
+  SoftAccentMarking,
+  SpiccatoMarking,
+  StaccatissimoMarking,
+  StaccatoMarking,
+  StressMarking,
+  StrongAccentMarking,
   Slur,
+  TenutoMarking,
+  TremoloMarking,
+  UnstressMarking,
   OctaveShift,
   Ending,
   Bar,
@@ -35,6 +49,7 @@ import {
   Clef,
   BarPart,
   RhythmicDuration,
+  Marking,
 } from './score';
 import Fraction from 'fraction.js';
 
@@ -159,11 +174,15 @@ class MNXWriter {
     if (this.needsMeasureIds) {
       result.id = measureIdForIndex(index);
     }
-    if (bar.timesig.length && bar.timesigChanged()) {
-      result.time = {
-        count: bar.timesig[0],
-        unit: bar.timesig[1] as 1 | 2 | 4 | 8 | 16 | 32 | 64 | 128,
+    if (bar.timesig && bar.timesigChanged()) {
+      const timeData: NonNullable<MeasureGlobal['time']> = {
+        count: bar.timesig.count,
+        unit: bar.timesig.unit as 1 | 2 | 4 | 8 | 16 | 32 | 64 | 128,
       };
+      if (bar.timesig.display) {
+        timeData.display = bar.timesig.display;
+      }
+      result.time = timeData;
     }
     if (bar.keysig && bar.keysigChanged()) {
       result.key = { fifths: bar.keysig.fifths };
@@ -228,7 +247,7 @@ class MNXWriter {
   encodeSequence(
     sequence: Sequence,
     ottavas: Ottava[]
-  ): { content: SequenceContent } {
+  ): Pick<MNXSequence, 'content' | 'voice'> {
     const content: SequenceContent = [];
     let position = new Fraction(0, 1);
 
@@ -266,7 +285,11 @@ class MNXWriter {
       }
     }
 
-    return { content };
+    const result: Pick<MNXSequence, 'content' | 'voice'> = { content };
+    if (sequence.sequenceId) {
+      result.voice = sequence.sequenceId;
+    }
+    return result;
   }
 
   encodeSequenceItem(item: SequenceItem): SequenceContent[number] | undefined {
@@ -307,6 +330,9 @@ class MNXWriter {
       if (encodedSlurs.length) {
         result.slurs = encodedSlurs;
       }
+    }
+    if (event.markings && event.markings.length) {
+      result.markings = this.encodeEventMarkings(event.markings);
     }
     return result;
   }
@@ -350,8 +376,51 @@ class MNXWriter {
     if (note.renderedAcc) {
       result.accidentalDisplay = { show: true };
     }
-    if (note.tieEndNote) {
-      result.ties = [{ target: note.tieEndNote }];
+    if (note.ties.length) {
+      const ties: MNXTie[] = [];
+      for (const tie of note.ties) {
+        if (!tie.endNote) {
+          continue;
+        }
+        const tieData: MNXTie = { target: tie.endNote.noteId };
+        if (tie.side) {
+          tieData.side = tie.side;
+        }
+        ties.push(tieData);
+      }
+      if (ties.length) {
+        result.ties = ties;
+      }
+    }
+    return result;
+  }
+
+  encodeEventMarkings(markings: Marking[]): EventMarkings {
+    const result: EventMarkings = {};
+    for (const marking of markings) {
+      if (marking instanceof AccentMarking) {
+        result.accent = {};
+      } else if (marking instanceof BreathMarking) {
+        result.breath = {};
+      } else if (marking instanceof SoftAccentMarking) {
+        result.softAccent = {};
+      } else if (marking instanceof SpiccatoMarking) {
+        result.spiccato = {};
+      } else if (marking instanceof StaccatissimoMarking) {
+        result.staccatissimo = {};
+      } else if (marking instanceof StaccatoMarking) {
+        result.staccato = {};
+      } else if (marking instanceof StressMarking) {
+        result.stress = {};
+      } else if (marking instanceof StrongAccentMarking) {
+        result.strongAccent = {};
+      } else if (marking instanceof TenutoMarking) {
+        result.tenuto = {};
+      } else if (marking instanceof TremoloMarking) {
+        result.tremolo = { marks: marking.marks };
+      } else if (marking instanceof UnstressMarking) {
+        result.unstress = {};
+      }
     }
     return result;
   }

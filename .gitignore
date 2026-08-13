@@ -119,3 +119,4 @@ dist
 lib/
 
 .DS_Store
+.tmp-audit/

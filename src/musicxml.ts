@@ -12,9 +12,11 @@ import {
   type Element,
 } from './xml';
 import {
+  AccentMarking,
   Bar,
   BarPart,
   Beam,
+  BreathMarking,
   Clef,
   Ending,
   GraceNoteGroup,
@@ -26,13 +28,25 @@ import {
   RhythmicDuration,
   Score,
   Sequence,
+  SoftAccentMarking,
+  SpiccatoMarking,
+  StaccatissimoMarking,
+  StaccatoMarking,
+  StressMarking,
+  StrongAccentMarking,
   Slur,
+  TenutoMarking,
+  Tie,
+  TimeSignature,
+  TremoloMarking,
   TupletRatio,
   Event,
   Rest,
   Pitch,
   WHITE_KEY,
   BeamHook,
+  UnstressMarking,
+  Marking,
 } from './score';
 
 const RHYTHM_TYPES = new Map([
@@ -220,7 +234,7 @@ class MusicXMLReader {
   xml: Document;
   score: Score;
   partDivisions: Record<string, number>;
-  openTies: Note[];
+  openTies: Tie[];
   currentBeams: [Sequence, Event, [number, string][]][];
   openBeams: Record<string, Record<number, Beam>>;
   openTuplets: Record<string, Event[]>;
@@ -294,10 +308,7 @@ class MusicXMLReader {
 
     let firstMeasureEl: Element | null = null;
     try {
-      firstMeasureEl = selectOne(
-        `measure/part[@id="${partId}"]`,
-        this.xml
-      );
+      firstMeasureEl = selectOne(`measure/part[@id="${partId}"]`, this.xml);
     } catch (error) {
       // handle the error
       console.error(error);
@@ -605,37 +616,46 @@ class MusicXMLReader {
     }
   }
 
-  parseTime(timeEl: Element): number[] {
+  parseTime(timeEl: Element): TimeSignature {
     let isValid = true;
     let numerator = 4;
     let denominator = 4;
+    const symbol = timeEl.getAttribute('symbol');
 
     try {
       const beatsEl = querySelector(timeEl, 'beats');
-      // @ts-expect-error
-      numerator = parseInt(beatsEl.textContent || '', 10);
+      numerator = parseInt(beatsEl!.textContent || '', 10);
+      if (isNaN(numerator)) {
+        isValid = false;
+      }
     } catch (error) {
       isValid = false;
     }
 
     try {
       const beatTypeEl = querySelector(timeEl, 'beat-type');
-      // @ts-expect-error
-      denominator = parseInt(beatTypeEl.textContent || '', 10);
+      denominator = parseInt(beatTypeEl!.textContent || '', 10);
+      if (isNaN(denominator)) {
+        isValid = false;
+      }
     } catch (error) {
       isValid = false;
     }
 
     if (!isValid) {
-      if (timeEl.getAttribute('symbol') !== 'common') {
-        // Handle error or throw an exception based on your requirements
-        console.error('Invalid data in <time> element}');
-        // You may return a default value or throw an exception here
-        throw new NotationDataError('Invalid data in <time> element }');
+      if (symbol === 'common') {
+        numerator = 4;
+        denominator = 4;
+      } else if (symbol === 'cut') {
+        numerator = 2;
+        denominator = 2;
+      } else {
+        throw new NotationDataError('Invalid data in <time> element');
       }
     }
 
-    return [numerator, denominator];
+    const display = symbol === 'common' || symbol === 'cut' ? symbol : null;
+    return new TimeSignature(numerator, denominator, display);
   }
 
   parseNote(noteEl: Element, part: Part, barPart: BarPart): number {
@@ -648,6 +668,7 @@ class MusicXMLReader {
     let numDots = 0;
     const beams: [number, string][] = [];
     const closedTupletNumbers: string[] = [];
+    const eventMarkings: Marking[] = [];
     let timeMod: TupletRatio | null = null;
     let event;
 
@@ -683,13 +704,19 @@ class MusicXMLReader {
         case 'grace':
           isGrace = true;
           break;
-        case 'notations':
-          // eslint-disable-next-line no-case-declarations
-          const newClosedTupletNumbers = this.parseNotations(el, note);
+        case 'notations': {
+          const [newClosedTupletNumbers, markings] = this.parseNotations(
+            el,
+            note
+          );
           if (newClosedTupletNumbers.length) {
             closedTupletNumbers.push(...newClosedTupletNumbers);
           }
+          if (markings.length) {
+            eventMarkings.push(...markings);
+          }
           break;
+        }
         case 'pitch':
           note.pitch = this.parsePitch(el);
           break;
@@ -781,6 +808,10 @@ class MusicXMLReader {
 
     event.eventItems.push(eventItem);
 
+    if (eventMarkings.length) {
+      event.markings.push(...eventMarkings);
+    }
+
     if (Object.keys(this.openTuplets).length) {
       for (const eventList of Object.values(this.openTuplets)) {
         eventList.push(event);
@@ -820,16 +851,28 @@ class MusicXMLReader {
     return [number, beamEl.textContent || ''];
   }
 
-  parseNotations(notationsEl: Element, note: Note): string[] {
+  parseNotations(notationsEl: Element, note: Note): [string[], Marking[]] {
     const closedTupletNumbers: string[] = [];
+    const eventMarkings: Marking[] = [];
     for (const el of notationsEl.children) {
       const tag = el.tagName;
-      if (tag === 'slur') {
+      if (tag === 'articulations') {
+        this.parseArticulations(el, eventMarkings);
+      } else if (tag === 'ornaments') {
+        this.parseOrnaments(el, eventMarkings);
+      } else if (tag === 'slur') {
         this.parseSlur(el, note);
       } else if (tag === 'tied') {
         const tiedType = el.getAttribute('type');
         if (tiedType === 'start') {
-          this.openTies.push(note);
+          const tie = new Tie(note, null);
+          const orientation = el.getAttribute('orientation');
+          if (orientation === 'over') {
+            tie.side = 'up';
+          } else if (orientation === 'under') {
+            tie.side = 'down';
+          }
+          this.openTies.push(tie);
         } else if (tiedType === 'stop') {
           // Find the Note that started this tie.
           if (!note.pitch) {
@@ -837,9 +880,10 @@ class MusicXMLReader {
               '<tied> must come after <pitch> within <note>.'
             );
           }
-          const startNote = this.getOpenTieByEndNote(note);
-          if (startNote) {
-            startNote.tieEndNote = note.noteId;
+          const tie = this.getOpenTieByEndNote(note);
+          if (tie && tie.startNote) {
+            tie.endNote = note;
+            tie.startNote.ties.push(tie);
             note.isReferenced = true;
           }
         }
@@ -850,7 +894,53 @@ class MusicXMLReader {
         }
       }
     }
-    return closedTupletNumbers;
+    return [closedTupletNumbers, eventMarkings];
+  }
+
+  parseArticulations(articulationsEl: Element, eventMarkings: Marking[]): void {
+    for (const el of articulationsEl.children) {
+      const tag = el.tagName;
+      if (tag === 'accent') {
+        eventMarkings.push(new AccentMarking());
+      } else if (tag === 'breath-mark') {
+        eventMarkings.push(new BreathMarking());
+      } else if (tag === 'detached-legato') {
+        // MNX has no detached legato; encode as staccato + tenuto.
+        eventMarkings.push(new StaccatoMarking());
+        eventMarkings.push(new TenutoMarking());
+      } else if (tag === 'soft-accent') {
+        eventMarkings.push(new SoftAccentMarking());
+      } else if (tag === 'spiccato') {
+        eventMarkings.push(new SpiccatoMarking());
+      } else if (tag === 'staccatissimo') {
+        eventMarkings.push(new StaccatissimoMarking());
+      } else if (tag === 'staccato') {
+        eventMarkings.push(new StaccatoMarking());
+      } else if (tag === 'stress') {
+        eventMarkings.push(new StressMarking());
+      } else if (tag === 'strong-accent') {
+        eventMarkings.push(new StrongAccentMarking());
+      } else if (tag === 'tenuto') {
+        eventMarkings.push(new TenutoMarking());
+      } else if (tag === 'unstress') {
+        eventMarkings.push(new UnstressMarking());
+      }
+    }
+  }
+
+  parseOrnaments(ornamentsEl: Element, eventMarkings: Marking[]): void {
+    for (const el of ornamentsEl.children) {
+      const tag = el.tagName;
+      if (tag === 'tremolo') {
+        if ((el.getAttribute('type') || 'single') === 'single') {
+          const marks = parseInt(el.textContent || '', 10);
+          if (isNaN(marks)) {
+            throw new NotationDataError('<tremolo> has invalid contents.');
+          }
+          eventMarkings.push(new TremoloMarking(marks));
+        }
+      }
+    }
   }
 
   parseSlur(slurEl: Element, note: Note): void {
@@ -1008,12 +1098,19 @@ class MusicXMLReader {
     }
   }
 
-  getOpenTieByEndNote(endNote: Note): Note | null {
+  getOpenTieByEndNote(endNote: Note): Tie | null {
     for (let i = 0; i < this.openTies.length; i++) {
-      const note = this.openTies[i];
-      if (note !== endNote && note.pitch!.equals(endNote.pitch!)) {
+      const tie = this.openTies[i];
+      const startNote = tie.startNote;
+      if (
+        startNote &&
+        startNote !== endNote &&
+        startNote.pitch &&
+        endNote.pitch &&
+        startNote.pitch.equals(endNote.pitch)
+      ) {
         this.openTies.splice(i, 1);
-        return note;
+        return tie;
       }
     }
     return null;

@@ -98,7 +98,7 @@ export class Part {
 export class Bar {
   score: Score;
   idx: number;
-  timesig: number[];
+  timesig: TimeSignature | null;
   keysig: KeySignature | null;
   startRepeat = false;
   endRepeat = 0;
@@ -109,7 +109,7 @@ export class Bar {
   constructor(
     score: Score,
     idx: number,
-    timesig: number[] = [],
+    timesig: TimeSignature | null = null,
     keysig: KeySignature | null = null
   ) {
     this.score = score;
@@ -123,11 +123,14 @@ export class Bar {
   }
 
   timesigChanged(): boolean {
-    return (
-      this.idx === 0 ||
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      this.previous()!.timesig.toString() !== this.timesig.toString()
-    );
+    if (this.idx === 0) {
+      return true;
+    }
+    const previous = this.previous()!.timesig;
+    if (this.timesig === null || previous === null) {
+      return this.timesig !== previous;
+    }
+    return !previous.equals(this.timesig);
   }
 
   activeKeysig(): KeySignature {
@@ -315,6 +318,7 @@ export class Event extends SequenceItem {
   duration: RhythmicDuration;
   eventItems: EventItem[];
   slurs: Slur[];
+  markings: Marking[];
   isReferenced: boolean;
 
   constructor(
@@ -327,6 +331,7 @@ export class Event extends SequenceItem {
     this.duration = duration;
     this.eventItems = [];
     this.slurs = [];
+    this.markings = [];
     this.isReferenced = false;
   }
 
@@ -337,6 +342,28 @@ export class Event extends SequenceItem {
       }
     }
     return true;
+  }
+}
+
+export class Marking {}
+
+export class AccentMarking extends Marking {}
+export class BreathMarking extends Marking {}
+export class SoftAccentMarking extends Marking {}
+export class SpiccatoMarking extends Marking {}
+export class StaccatoMarking extends Marking {}
+export class StaccatissimoMarking extends Marking {}
+export class StressMarking extends Marking {}
+export class StrongAccentMarking extends Marking {}
+export class TenutoMarking extends Marking {}
+export class UnstressMarking extends Marking {}
+
+export class TremoloMarking extends Marking {
+  marks: number;
+
+  constructor(marks: number) {
+    super();
+    this.marks = marks;
   }
 }
 
@@ -406,7 +433,7 @@ export class Note extends EventItem {
   noteId: string;
   pitch: Pitch | null;
   renderedAcc: number | null;
-  tieEndNote: string | null;
+  ties: Tie[];
   isReferenced: boolean;
 
   constructor(score: Score, noteId: string) {
@@ -415,12 +442,24 @@ export class Note extends EventItem {
     this.noteId = noteId;
     this.pitch = null;
     this.renderedAcc = null;
-    this.tieEndNote = null;
+    this.ties = [];
     this.isReferenced = false;
   }
 }
 
 export class Rest extends EventItem {}
+
+export class Tie {
+  startNote: Note | null;
+  endNote: Note | null;
+  side: 'up' | 'down' | null;
+
+  constructor(startNote: Note | null = null, endNote: Note | null = null) {
+    this.startNote = startNote;
+    this.endNote = endNote;
+    this.side = null;
+  }
+}
 
 export class Slur {
   //  These are arbitrary codes, used only internally.
@@ -555,6 +594,33 @@ export class Pitch {
 
   toConcert(part: Part): Pitch {
     return this.transposeChromatic(part.transpose);
+  }
+}
+
+export class TimeSignature {
+  count: number;
+  unit: number;
+  display: 'common' | 'cut' | null;
+
+  constructor(
+    count: number,
+    unit: number,
+    display: 'common' | 'cut' | null = null
+  ) {
+    this.count = count;
+    this.unit = unit;
+    this.display = display;
+  }
+
+  equals(other: TimeSignature | null): boolean {
+    if (!other) {
+      return false;
+    }
+    return (
+      this.count === other.count &&
+      this.unit === other.unit &&
+      this.display === other.display
+    );
   }
 }
 

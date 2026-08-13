@@ -36,6 +36,35 @@ const mnxScore = getMNXScore(score); // encode model as mnx score object
 // }
 ```
 
+## Supported features
+
+Coverage is fixture-driven (`test/fixtures/`). Status:
+
+| Area | Status | Notes / fixtures |
+| --- | --- | --- |
+| Basic notes, rests, chords | Supported | `basic`, `basic_chord_rest`, `basic_rest_without_type`, `basic_scale` |
+| Accidentals | Supported | `basic_accidentals` (`accidentalDisplay`) |
+| Augmentation dots | Supported | `basic_aug_dots` |
+| Ties | Supported | `basic_ties`, `tie_side` (incl. `side`) |
+| Beams | Partial | Basic / hooks / over-barline / secondary breaks / grace beams. Encoding of `beams` on part-measure still TODO |
+| Clefs / mid-bar clef changes | Supported | `clef_changes` |
+| Grace notes | Supported | `grace_notes` |
+| Key signatures | Supported | `keysigs` |
+| Time signatures | Supported | `timesigs`, `timesig_glyphs` (`display: common\|cut`) |
+| Multiple parts | Supported | `parts_basic` |
+| Multiple voices | Supported | `voices_basic` (separate `sequences`, emits `voice`) |
+| Ottavas | Supported | `octaveshifts` (`part-measure.ottavas`) |
+| Repeats / endings | Supported | `repeats_*`, `repeats_altendings*` |
+| Slurs | Partial | Basic / chords / note-targeted. Incomplete/outgoing slurs omitted (schema requires `target`) |
+| Tuplets | Supported | `tuplets_*` |
+| Markings / articulations | Supported | `markings` (staccato, accent, tenuto, tremolo single, …) |
+| Dynamics | Not yet | |
+| Lyrics | Not yet | |
+| Jumps (D.S., Fine, …) | Not yet | |
+| Layouts / system layouts | Not yet | |
+| Multi-measure / full-measure rests | Not yet | |
+| Tremolos (multi-note) | Not yet | Single-note tremolo via markings only |
+
 ## Maintaining this library
 
 ### Source of truth
