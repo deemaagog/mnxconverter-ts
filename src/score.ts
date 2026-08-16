@@ -256,9 +256,9 @@ export class SequenceContent {
 
 export class Sequence extends SequenceContent {
   sequenceId: string;
-  beams: any[];
+  beams: Beam[];
 
-  constructor(items: SequenceItem[], sequenceId: string, beams: any[] = []) {
+  constructor(items: SequenceItem[], sequenceId: string, beams: Beam[] = []) {
     super(items);
     this.sequenceId = sequenceId;
     this.beams = beams;
@@ -369,7 +369,7 @@ export class TremoloMarking extends Marking {
 
 export class Beam {
   events: Event[] = [];
-  children: any[] = [];
+  children: (Beam | BeamHook)[] = [];
 }
 
 export class BeamHook {

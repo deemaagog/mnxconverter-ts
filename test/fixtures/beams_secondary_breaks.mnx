@@ -2,7 +2,8 @@
   "mnx": {
     "version": 1,
     "support": {
-      "useAccidentalDisplay": true
+      "useAccidentalDisplay": true,
+      "useBeams": true
     }
   },
   "global": {
@@ -257,6 +258,74 @@
                 "sign": "G"
               }
             }
+          ],
+          "beams": [
+            {
+              "events": [
+                "ev1",
+                "ev2",
+                "ev3",
+                "ev4",
+                "ev5",
+                "ev6",
+                "ev7",
+                "ev8"
+              ],
+              "beams": [
+                {
+                  "events": [
+                    "ev1",
+                    "ev2",
+                    "ev3",
+                    "ev4",
+                    "ev5",
+                    "ev6",
+                    "ev7",
+                    "ev8"
+                  ]
+                }
+              ]
+            },
+            {
+              "events": [
+                "ev9",
+                "ev10",
+                "ev11",
+                "ev12"
+              ],
+              "beams": [
+                {
+                  "events": [
+                    "ev9",
+                    "ev10",
+                    "ev11",
+                    "ev12"
+                  ]
+                }
+              ]
+            },
+            {
+              "events": [
+                "ev13",
+                "ev14",
+                "ev15",
+                "ev16"
+              ],
+              "beams": [
+                {
+                  "events": [
+                    "ev13",
+                    "ev14"
+                  ]
+                },
+                {
+                  "events": [
+                    "ev15",
+                    "ev16"
+                  ]
+                }
+              ]
+            }
           ]
         },
         {
@@ -492,6 +561,116 @@
                     "base": "half"
                   },
                   "rest": {}
+                }
+              ]
+            }
+          ],
+          "beams": [
+            {
+              "events": [
+                "ev17",
+                "ev18",
+                "ev19",
+                "ev20",
+                "ev21",
+                "ev22",
+                "ev23",
+                "ev24"
+              ],
+              "beams": [
+                {
+                  "events": [
+                    "ev17",
+                    "ev18",
+                    "ev19",
+                    "ev20"
+                  ],
+                  "beams": [
+                    {
+                      "events": [
+                        "ev17",
+                        "ev18",
+                        "ev19",
+                        "ev20"
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "events": [
+                    "ev21",
+                    "ev22",
+                    "ev23",
+                    "ev24"
+                  ],
+                  "beams": [
+                    {
+                      "events": [
+                        "ev21",
+                        "ev22",
+                        "ev23",
+                        "ev24"
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "events": [
+                "ev25",
+                "ev26",
+                "ev27",
+                "ev28",
+                "ev29",
+                "ev30",
+                "ev31",
+                "ev32"
+              ],
+              "beams": [
+                {
+                  "events": [
+                    "ev25",
+                    "ev26",
+                    "ev27",
+                    "ev28"
+                  ],
+                  "beams": [
+                    {
+                      "events": [
+                        "ev25",
+                        "ev26"
+                      ]
+                    },
+                    {
+                      "events": [
+                        "ev27",
+                        "ev28"
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "events": [
+                    "ev29",
+                    "ev30",
+                    "ev31",
+                    "ev32"
+                  ],
+                  "beams": [
+                    {
+                      "events": [
+                        "ev29",
+                        "ev30"
+                      ]
+                    },
+                    {
+                      "events": [
+                        "ev31",
+                        "ev32"
+                      ]
+                    }
+                  ]
                 }
               ]
             }
