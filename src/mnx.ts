@@ -1,4 +1,5 @@
 import type {
+  Beam as MNXBeam,
   Clef as MNXClef,
   Event as MNXEvent,
   EventMarkings,
@@ -21,6 +22,8 @@ import type {
 } from './mnx-types';
 import {
   AccentMarking,
+  Beam,
+  BeamHook,
   BreathMarking,
   Score,
   Note,
@@ -113,10 +116,12 @@ export const getMNXScore = (score: Score): MNXDocument => {
 class MNXWriter {
   score: Score;
   needsMeasureIds: boolean;
+  useBeams: boolean;
 
   constructor(score: Score) {
     this.score = score;
     this.needsMeasureIds = this.scoreHasOttavas();
+    this.useBeams = this.scoreHasBeams();
   }
 
   scoreHasOttavas(): boolean {
@@ -134,11 +139,30 @@ class MNXWriter {
     return false;
   }
 
+  scoreHasBeams(): boolean {
+    for (const bar of this.score.bars) {
+      for (const barPart of Object.values(bar.barParts)) {
+        for (const sequence of barPart.sequences) {
+          if (sequence.beams.length) {
+            return true;
+          }
+        }
+      }
+    }
+    return false;
+  }
+
   encodeScore(): MNXDocument {
+    const support: NonNullable<MNXDocument['mnx']['support']> = {
+      useAccidentalDisplay: true,
+    };
+    if (this.useBeams) {
+      support.useBeams = true;
+    }
     return {
       mnx: {
         version: 1,
-        support: { useAccidentalDisplay: true },
+        support,
       },
       global: this.encodeGlobal(),
       parts: this.encodeParts(),
@@ -240,6 +264,12 @@ class MNXWriter {
     }
     if (ottavas.length) {
       result.ottavas = ottavas;
+    }
+    const beams = barPart.sequences.flatMap(sequence =>
+      sequence.beams.map(beam => this.encodeBeam(beam))
+    );
+    if (beams.length) {
+      result.beams = beams;
     }
     return result;
   }
@@ -491,6 +521,26 @@ class MNXWriter {
       type: 'grace',
       content: graceNoteGroup.events.map(event => this.encodeEvent(event)),
     };
+  }
+
+  encodeBeam(beam: Beam): MNXBeam {
+    const result: MNXBeam = {
+      events: beam.events.map(event => event.eventId),
+    };
+    if (beam.children.length) {
+      result.beams = beam.children.map(child => this.encodeBeamChild(child));
+    }
+    return result;
+  }
+
+  encodeBeamChild(child: Beam | BeamHook): MNXBeam {
+    if (child instanceof BeamHook) {
+      return {
+        events: [child.event.eventId],
+        direction: child.isForward ? 'right' : 'left',
+      };
+    }
+    return this.encodeBeam(child);
   }
 
   encodePositionedClef(positionedClef: PositionedClef): MNXPositionedClef {

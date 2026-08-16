@@ -46,7 +46,7 @@ Coverage is fixture-driven (`test/fixtures/`). Status:
 | Accidentals | Supported | `basic_accidentals` (`accidentalDisplay`) |
 | Augmentation dots | Supported | `basic_aug_dots` |
 | Ties | Supported | `basic_ties`, `tie_side` (incl. `side`) |
-| Beams | Partial | Basic / hooks / over-barline / secondary breaks / grace beams. Encoding of `beams` on part-measure still TODO |
+| Beams | Supported | Basic / hooks / over-barline / secondary breaks / grace beams on `part-measure.beams` (implied secondary-beam-breaks example not yet covered) |
 | Clefs / mid-bar clef changes | Supported | `clef_changes` |
 | Grace notes | Supported | `grace_notes` |
 | Key signatures | Supported | `keysigs` |

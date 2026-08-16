@@ -2,7 +2,8 @@
   "mnx": {
     "version": 1,
     "support": {
-      "useAccidentalDisplay": true
+      "useAccidentalDisplay": true,
+      "useBeams": true
     }
   },
   "global": {
@@ -145,6 +146,24 @@
                 "sign": "G"
               }
             }
+          ],
+          "beams": [
+            {
+              "events": [
+                "ev1",
+                "ev2",
+                "ev3",
+                "ev4"
+              ]
+            },
+            {
+              "events": [
+                "ev5",
+                "ev6",
+                "ev7",
+                "ev8"
+              ]
+            }
           ]
         },
         {
@@ -255,6 +274,31 @@
                     }
                   ]
                 }
+              ]
+            }
+          ],
+          "beams": [
+            {
+              "events": [
+                "ev9",
+                "ev10",
+                "ev11",
+                "ev12",
+                "ev13"
+              ],
+              "beams": [
+                {
+                  "events": [
+                    "ev11",
+                    "ev12"
+                  ]
+                }
+              ]
+            },
+            {
+              "events": [
+                "ev14",
+                "ev15"
               ]
             }
           ]

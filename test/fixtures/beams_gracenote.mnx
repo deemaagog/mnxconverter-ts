@@ -2,7 +2,8 @@
   "mnx": {
     "version": 1,
     "support": {
-      "useAccidentalDisplay": true
+      "useAccidentalDisplay": true,
+      "useBeams": true
     }
   },
   "global": {
@@ -111,6 +112,16 @@
                 "staffPosition": -2,
                 "sign": "G"
               }
+            }
+          ],
+          "beams": [
+            {
+              "events": [
+                "ev1",
+                "ev3",
+                "ev4",
+                "ev5"
+              ]
             }
           ]
         }
