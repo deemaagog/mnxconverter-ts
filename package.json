@@ -1,6 +1,6 @@
 {
   "name": "mnxconverter",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Music XML - MNX converter",
   "main": "./lib/esm/index.js",
   "exports": {
